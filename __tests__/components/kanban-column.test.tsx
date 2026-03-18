@@ -12,6 +12,14 @@ jest.mock("framer-motion", () => ({
   LayoutGroup: ({ children }: any) => <>{children}</>,
 }));
 
+jest.mock("@hello-pangea/dnd", () => ({
+  DragDropContext: ({ children }: any) => <>{children}</>,
+  Droppable: ({ children }: any) =>
+    children({ droppableProps: {}, innerRef: jest.fn(), placeholder: null }, {}),
+  Draggable: ({ children }: any) =>
+    children({ draggableProps: {}, dragHandleProps: {}, innerRef: jest.fn() }, {}),
+}));
+
 jest.mock("@/components/application-card", () => ({
   ApplicationCard: ({ application, onClick }: any) => (
     <div data-testid="application-card" onClick={() => onClick(application)}>

@@ -13,6 +13,14 @@ jest.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 
+jest.mock("@hello-pangea/dnd", () => ({
+  DragDropContext: ({ children }: any) => <>{children}</>,
+  Droppable: ({ children }: any) =>
+    children({ droppableProps: {}, innerRef: jest.fn(), placeholder: null }, {}),
+  Draggable: ({ children }: any) =>
+    children({ draggableProps: {}, dragHandleProps: {}, innerRef: jest.fn() }, {}),
+}));
+
 const mockApp: Application = {
   id: "1",
   companyName: "Acme Corp",
@@ -29,26 +37,26 @@ const mockApp: Application = {
 
 describe("ApplicationCard", () => {
   it("renders company name and position", () => {
-    render(<ApplicationCard application={mockApp} onClick={jest.fn()} />);
+    render(<ApplicationCard application={mockApp} onClick={jest.fn()} index={0} />);
     expect(screen.getByText("Acme Corp")).toBeInTheDocument();
     expect(screen.getByText("Frontend Developer")).toBeInTheDocument();
   });
 
   it("renders tech stack tags", () => {
-    render(<ApplicationCard application={mockApp} onClick={jest.fn()} />);
+    render(<ApplicationCard application={mockApp} onClick={jest.fn()} index={0} />);
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
   });
 
   it("renders source and date", () => {
-    render(<ApplicationCard application={mockApp} onClick={jest.fn()} />);
+    render(<ApplicationCard application={mockApp} onClick={jest.fn()} index={0} />);
     expect(screen.getByText("LinkedIn")).toBeInTheDocument();
-    expect(screen.getByText(/2026-03-18/)).toBeInTheDocument();
+    expect(screen.getByText("18/03/2026")).toBeInTheDocument();
   });
 
   it("calls onClick when clicked", async () => {
     const onClick = jest.fn();
-    render(<ApplicationCard application={mockApp} onClick={onClick} />);
+    render(<ApplicationCard application={mockApp} onClick={onClick} index={0} />);
     await userEvent.click(screen.getByText("Acme Corp"));
     expect(onClick).toHaveBeenCalledWith(mockApp);
   });

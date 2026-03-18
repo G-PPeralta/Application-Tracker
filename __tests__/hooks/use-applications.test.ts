@@ -31,6 +31,7 @@ describe("groupApplications", () => {
   it("groups by status", () => {
     const result = groupApplications(apps, "", "", "", "createdAt");
     expect(result.Applied).toHaveLength(2);
+    expect(result["Interview Scheduled"]).toHaveLength(0);
     expect(result.Interview).toHaveLength(1);
     expect(result.Rejected).toHaveLength(0);
     expect(result.Offer).toHaveLength(0);

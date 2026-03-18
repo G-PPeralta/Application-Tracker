@@ -7,9 +7,11 @@ import { applicationSchema, type ApplicationFormData, type ApplicationFormInput,
 type Props = {
   onSubmit: (data: ApplicationFormData) => void;
   isSubmitting?: boolean;
+  defaultValues?: Partial<ApplicationFormData>;
+  onCancel?: () => void;
 };
 
-export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
+export function ApplicationForm({ onSubmit, isSubmitting, defaultValues, onCancel }: Props) {
   const {
     register,
     handleSubmit,
@@ -21,6 +23,7 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
       status: "Applied",
       techStack: [],
       jobDescription: "",
+      ...defaultValues,
     },
   });
 
@@ -68,6 +71,7 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
           id="techStack"
           placeholder="React, TypeScript, Node.js"
           className={inputClass}
+          defaultValue={defaultValues?.techStack ? defaultValues.techStack.join(", ") : ""}
           onChange={(e) => {
             const value = e.target.value;
             const arr = value.split(",").map((s) => s.trim()).filter(Boolean);
@@ -106,6 +110,11 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
       </div>
 
       <div>
+        <label htmlFor="interviewDate" className={labelClass}>Interview Date</label>
+        <input id="interviewDate" type="date" {...register("interviewDate")} className={inputClass} />
+      </div>
+
+      <div>
         <label htmlFor="notes" className={labelClass}>Notes</label>
         <textarea
           id="notes"
@@ -115,13 +124,24 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="rounded-lg bg-blue-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 transition-all"
-      >
-        {isSubmitting ? "Saving..." : "Save Application"}
-      </button>
+      <div className="flex justify-end gap-3">
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+        )}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="rounded-lg bg-blue-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 transition-all"
+        >
+          {isSubmitting ? "Saving..." : "Save Application"}
+        </button>
+      </div>
     </form>
   );
 }
