@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-status-applied: #EAB308;
+  --color-status-interview: #3B82F6;
+  --color-status-rejected: #EF4444;
+  --color-status-offer: #22C55E;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
