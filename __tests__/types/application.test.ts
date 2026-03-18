@@ -54,7 +54,20 @@ describe("applicationSchema", () => {
   });
 
   it("exports status and source constants", () => {
-    expect(STATUSES).toEqual(["Applied", "Interview", "Rejected", "Offer"]);
+    expect(STATUSES).toEqual(["Applied", "Interview Scheduled", "Interview", "Rejected", "Offer"]);
     expect(SOURCES).toEqual(["LinkedIn", "Indeed", "Company Site", "Other"]);
+  });
+
+  it("allows optional interviewDate", () => {
+    const result = applicationSchema.safeParse({
+      ...validApplication,
+      interviewDate: "2026-04-01",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("allows missing interviewDate", () => {
+    const result = applicationSchema.safeParse(validApplication);
+    expect(result.success).toBe(true);
   });
 });

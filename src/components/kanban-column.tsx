@@ -7,6 +7,7 @@ import type { Application, Status } from "@/types/application";
 
 const statusHeaderColors: Record<Status, string> = {
   Applied: "bg-status-applied",
+  "Interview Scheduled": "bg-status-interview",
   Interview: "bg-status-interview",
   Rejected: "bg-status-rejected",
   Offer: "bg-status-offer",

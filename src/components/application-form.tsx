@@ -7,9 +7,10 @@ import { applicationSchema, type ApplicationFormData, type ApplicationFormInput,
 type Props = {
   onSubmit: (data: ApplicationFormData) => void;
   isSubmitting?: boolean;
+  defaultValues?: Partial<ApplicationFormData>;
 };
 
-export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
+export function ApplicationForm({ onSubmit, isSubmitting, defaultValues }: Props) {
   const {
     register,
     handleSubmit,
@@ -21,6 +22,7 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
       status: "Applied",
       techStack: [],
       jobDescription: "",
+      ...defaultValues,
     },
   });
 
@@ -68,6 +70,7 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
           id="techStack"
           placeholder="React, TypeScript, Node.js"
           className={inputClass}
+          defaultValue={defaultValues?.techStack ? defaultValues.techStack.join(", ") : ""}
           onChange={(e) => {
             const value = e.target.value;
             const arr = value.split(",").map((s) => s.trim()).filter(Boolean);
@@ -103,6 +106,11 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
         <label htmlFor="appliedAt" className={labelClass}>Applied Date</label>
         <input id="appliedAt" type="date" {...register("appliedAt")} className={inputClass} />
         {errors.appliedAt && <p className={errorClass}>{errors.appliedAt.message}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="interviewDate" className={labelClass}>Interview Date</label>
+        <input id="interviewDate" type="date" {...register("interviewDate")} className={inputClass} />
       </div>
 
       <div>

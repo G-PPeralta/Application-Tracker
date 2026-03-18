@@ -41,6 +41,7 @@ export function groupApplications(
 
   const byStatus: Record<Status, Application[]> = {
     Applied: [],
+    "Interview Scheduled": [],
     Interview: [],
     Rejected: [],
     Offer: [],
@@ -88,6 +89,27 @@ export function useApplications() {
     setApplications((prev) => prev.filter((a) => a.id !== id));
   }, []);
 
+  const update = useCallback(async (id: string, data: Partial<ApplicationFormData>) => {
+    // Optimistic update
+    setApplications((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, ...data } : a))
+    );
+    try {
+      // Find the current app and merge with new data for a complete toSnakeCase call
+      const current = applications.find((a) => a.id === id);
+      if (!current) throw new Error("Application not found");
+      const merged = { ...current, ...data };
+      const row = await updateApplication(id, toSnakeCase(merged));
+      setApplications((prev) =>
+        prev.map((a) => (a.id === id ? toApplication(row) : a))
+      );
+    } catch (err) {
+      // Revert optimistic update on failure
+      await load();
+      throw err;
+    }
+  }, [applications, load]);
+
   const updateStatus = useCallback(async (id: string, newStatus: Status) => {
     setApplications((prev) =>
       prev.map((a) => (a.id === id ? { ...a, status: newStatus } : a))
@@ -113,5 +135,5 @@ export function useApplications() {
     [applications]
   );
 
-  return { applications, loading, error, add, remove, updateStatus, grouped, reload: load };
+  return { applications, loading, error, add, remove, update, updateStatus, grouped, reload: load };
 }

@@ -51,7 +51,7 @@ describe("ApplicationCard", () => {
   it("renders source and date", () => {
     render(<ApplicationCard application={mockApp} onClick={jest.fn()} index={0} />);
     expect(screen.getByText("LinkedIn")).toBeInTheDocument();
-    expect(screen.getByText(/2026-03-18/)).toBeInTheDocument();
+    expect(screen.getByText("18/03/2026")).toBeInTheDocument();
   });
 
   it("calls onClick when clicked", async () => {

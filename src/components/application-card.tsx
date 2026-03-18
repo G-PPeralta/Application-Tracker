@@ -6,6 +6,7 @@ import type { Application, Status } from "@/types/application";
 
 const statusColors: Record<Status, string> = {
   Applied: "bg-status-applied/20 text-status-applied",
+  "Interview Scheduled": "bg-status-interview/20 text-status-interview",
   Interview: "bg-status-interview/20 text-status-interview",
   Rejected: "bg-status-rejected/20 text-status-rejected",
   Offer: "bg-status-offer/20 text-status-offer",
@@ -57,7 +58,14 @@ export function ApplicationCard({ application, onClick, index }: Props) {
 
             <div className="flex items-center justify-between text-xs text-gray-400">
               <span>{application.source}</span>
-              <span>{application.appliedAt}</span>
+              <div className="text-right">
+                <span>{application.appliedAt.split("-").reverse().join("/")}</span>
+                {application.interviewDate && (
+                  <p className="text-xs text-gray-400">
+                    Interview: {application.interviewDate.split("-").reverse().join("/")}
+                  </p>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>

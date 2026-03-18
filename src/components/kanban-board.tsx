@@ -10,7 +10,7 @@ import { useApplications } from "@/hooks/use-applications";
 import { useFilters } from "@/hooks/use-filters";
 
 export function KanbanBoard() {
-  const { loading, error, grouped, remove, updateStatus } = useApplications();
+  const { loading, error, grouped, remove, update, updateStatus } = useApplications();
   const filters = useFilters();
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
 
@@ -58,7 +58,7 @@ export function KanbanBoard() {
       />
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {STATUSES.map((status) => (
             <KanbanColumn
               key={status}
@@ -75,6 +75,10 @@ export function KanbanBoard() {
         onClose={() => setSelectedApp(null)}
         onDelete={async (id) => {
           await remove(id);
+          setSelectedApp(null);
+        }}
+        onUpdate={async (id, data) => {
+          await update(id, data);
           setSelectedApp(null);
         }}
       />

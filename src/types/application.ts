@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const STATUSES = ["Applied", "Interview", "Rejected", "Offer"] as const;
+export const STATUSES = ["Applied", "Interview Scheduled", "Interview", "Rejected", "Offer"] as const;
 export const SOURCES = ["LinkedIn", "Indeed", "Company Site", "Other"] as const;
 
 export type Status = (typeof STATUSES)[number];
@@ -12,6 +12,7 @@ export const applicationSchema = z.object({
   jobDescription: z.string().default(""),
   techStack: z.array(z.string()).default([]),
   appliedAt: z.string().min(1, "Applied date is required"),
+  interviewDate: z.string().optional(),
   jobUrl: z.string().url("Must be a valid URL"),
   source: z.enum(SOURCES),
   status: z.enum(STATUSES).default("Applied"),

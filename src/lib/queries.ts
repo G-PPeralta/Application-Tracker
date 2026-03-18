@@ -10,6 +10,7 @@ type SnakeCaseApplication = {
   job_url: string;
   source: string;
   status: string;
+  interview_date: string | null;
   notes: string | null;
   created_at: string;
 };

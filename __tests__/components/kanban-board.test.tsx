@@ -31,19 +31,22 @@ jest.mock("@/hooks/use-applications", () => ({
     error: null,
     grouped: () => ({
       Applied: [],
+      "Interview Scheduled": [],
       Interview: [],
       Rejected: [],
       Offer: [],
     }),
     remove: jest.fn(),
+    update: jest.fn(),
     updateStatus: jest.fn(),
   }),
 }));
 
 describe("KanbanBoard", () => {
-  it("renders all four status columns", () => {
+  it("renders all five status columns", () => {
     render(<KanbanBoard />);
     expect(screen.getByText("Applied")).toBeInTheDocument();
+    expect(screen.getByText("Interview Scheduled")).toBeInTheDocument();
     expect(screen.getByText("Interview")).toBeInTheDocument();
     expect(screen.getByText("Rejected")).toBeInTheDocument();
     expect(screen.getByText("Offer")).toBeInTheDocument();

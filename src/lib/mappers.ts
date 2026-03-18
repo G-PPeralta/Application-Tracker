@@ -11,6 +11,7 @@ export function toApplication(row: Record<string, unknown>): Application {
     jobUrl: row.job_url as string,
     source: row.source as Application["source"],
     status: row.status as Application["status"],
+    interviewDate: (row.interview_date as string) ?? undefined,
     notes: (row.notes as string) ?? undefined,
     createdAt: row.created_at as string,
   };
@@ -26,6 +27,7 @@ export function toSnakeCase(data: ApplicationFormData) {
     job_url: data.jobUrl,
     source: data.source,
     status: data.status,
+    interview_date: data.interviewDate ?? null,
     notes: data.notes ?? null,
   };
 }

@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS applications (
   applied_at DATE NOT NULL,
   job_url TEXT NOT NULL,
   source TEXT NOT NULL CHECK (source IN ('LinkedIn', 'Indeed', 'Company Site', 'Other')),
-  status TEXT NOT NULL DEFAULT 'Applied' CHECK (status IN ('Applied', 'Interview', 'Rejected', 'Offer')),
+  status TEXT NOT NULL DEFAULT 'Applied' CHECK (status IN ('Applied', 'Interview Scheduled', 'Interview', 'Rejected', 'Offer')),
+  interview_date DATE,
   notes TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
