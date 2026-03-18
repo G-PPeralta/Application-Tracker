@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { fetchApplications, insertApplication, deleteApplication } from "@/lib/queries";
+import { fetchApplications, insertApplication, deleteApplication, updateApplication } from "@/lib/queries";
 import { toApplication, toSnakeCase } from "@/lib/mappers";
 import type { Application, ApplicationFormData, Status } from "@/types/application";
 
@@ -88,6 +88,21 @@ export function useApplications() {
     setApplications((prev) => prev.filter((a) => a.id !== id));
   }, []);
 
+  const updateStatus = useCallback(async (id: string, newStatus: Status) => {
+    setApplications((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, status: newStatus } : a))
+    );
+    try {
+      await updateApplication(id, { status: newStatus });
+    } catch (err) {
+      // Revert optimistic update on failure
+      setApplications((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status: a.status } : a))
+      );
+      throw err;
+    }
+  }, []);
+
   const grouped = useCallback(
     (
       search: string,
@@ -98,5 +113,5 @@ export function useApplications() {
     [applications]
   );
 
-  return { applications, loading, error, add, remove, grouped, reload: load };
+  return { applications, loading, error, add, remove, updateStatus, grouped, reload: load };
 }

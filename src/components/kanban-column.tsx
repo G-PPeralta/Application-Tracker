@@ -1,5 +1,6 @@
 "use client";
 
+import { Droppable } from "@hello-pangea/dnd";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { ApplicationCard } from "./application-card";
 import type { Application, Status } from "@/types/application";
@@ -28,19 +29,29 @@ export function KanbanColumn({ status, applications, onCardClick }: Props) {
         </span>
       </div>
 
-      <div className="space-y-3">
-        <LayoutGroup>
-          <AnimatePresence mode="popLayout">
-            {applications.map((app) => (
-              <ApplicationCard
-                key={app.id}
-                application={app}
-                onClick={onCardClick}
-              />
-            ))}
-          </AnimatePresence>
-        </LayoutGroup>
-      </div>
+      <Droppable droppableId={status}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="space-y-3"
+          >
+            <LayoutGroup>
+              <AnimatePresence mode="popLayout">
+                {applications.map((app, index) => (
+                  <ApplicationCard
+                    key={app.id}
+                    application={app}
+                    onClick={onCardClick}
+                    index={index}
+                  />
+                ))}
+              </AnimatePresence>
+            </LayoutGroup>
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   );
 }

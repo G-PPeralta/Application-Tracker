@@ -11,6 +11,14 @@ jest.mock("framer-motion", () => ({
   LayoutGroup: ({ children }: any) => <>{children}</>,
 }));
 
+jest.mock("@hello-pangea/dnd", () => ({
+  DragDropContext: ({ children }: any) => <>{children}</>,
+  Droppable: ({ children }: any) =>
+    children({ droppableProps: {}, innerRef: jest.fn(), placeholder: null }, {}),
+  Draggable: ({ children }: any) =>
+    children({ draggableProps: {}, dragHandleProps: {}, innerRef: jest.fn() }, {}),
+}));
+
 jest.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
   useRouter: () => ({ replace: jest.fn() }),
@@ -28,6 +36,7 @@ jest.mock("@/hooks/use-applications", () => ({
       Offer: [],
     }),
     remove: jest.fn(),
+    updateStatus: jest.fn(),
   }),
 }));
 

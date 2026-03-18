@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { STATUSES, type Application } from "@/types/application";
+import { DragDropContext, type DropResult } from "@hello-pangea/dnd";
+import { STATUSES, type Application, type Status } from "@/types/application";
 import { KanbanColumn } from "./kanban-column";
 import { Filters } from "./filters";
 import { ApplicationModal } from "./application-modal";
@@ -9,7 +10,7 @@ import { useApplications } from "@/hooks/use-applications";
 import { useFilters } from "@/hooks/use-filters";
 
 export function KanbanBoard() {
-  const { loading, error, grouped, remove } = useApplications();
+  const { loading, error, grouped, remove, updateStatus } = useApplications();
   const filters = useFilters();
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
 
@@ -19,6 +20,13 @@ export function KanbanBoard() {
     filters.sourceFilter,
     filters.sortBy
   );
+
+  const handleDragEnd = (result: DropResult) => {
+    const { draggableId, destination } = result;
+    if (!destination) return;
+    const newStatus = destination.droppableId as Status;
+    updateStatus(draggableId, newStatus);
+  };
 
   if (loading) {
     return (
@@ -49,16 +57,18 @@ export function KanbanBoard() {
         onSortByChange={filters.setSortBy}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {STATUSES.map((status) => (
-          <KanbanColumn
-            key={status}
-            status={status}
-            applications={columns[status]}
-            onCardClick={setSelectedApp}
-          />
-        ))}
-      </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {STATUSES.map((status) => (
+            <KanbanColumn
+              key={status}
+              status={status}
+              applications={columns[status]}
+              onCardClick={setSelectedApp}
+            />
+          ))}
+        </div>
+      </DragDropContext>
 
       <ApplicationModal
         application={selectedApp}
