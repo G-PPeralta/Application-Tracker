@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Navigation />
-        <main className="max-w-7xl mx-auto px-6 py-8">
+        <main className="mx-auto px-6 py-8">
           {children}
         </main>
       </body>

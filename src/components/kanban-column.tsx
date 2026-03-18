@@ -17,11 +17,12 @@ type Props = {
   status: Status;
   applications: Application[];
   onCardClick: (application: Application) => void;
+  onAdd: (status: Status) => void;
 };
 
-export function KanbanColumn({ status, applications, onCardClick }: Props) {
+export function KanbanColumn({ status, applications, onCardClick, onAdd }: Props) {
   return (
-    <div className="flex-1 min-w-[280px]">
+    <div className="min-w-0">
       <div className="flex items-center gap-2 mb-4">
         <div className={`w-3 h-3 rounded-full ${statusHeaderColors[status]}`} />
         <h2 className="font-semibold text-gray-700">{status}</h2>
@@ -53,6 +54,13 @@ export function KanbanColumn({ status, applications, onCardClick }: Props) {
           </div>
         )}
       </Droppable>
+
+      <button
+        onClick={() => onAdd(status)}
+        className="mt-3 w-full flex items-center gap-1 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <span className="text-lg leading-none">+</span> Add
+      </button>
     </div>
   );
 }

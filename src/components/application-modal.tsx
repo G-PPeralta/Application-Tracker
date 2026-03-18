@@ -54,6 +54,7 @@ export function ApplicationModal({ application, onClose, onDelete, onUpdate }: P
               </div>
               <ApplicationForm
                 onSubmit={handleUpdate}
+                onCancel={() => setIsEditing(false)}
                 defaultValues={{
                   companyName: application.companyName,
                   position: application.position,
@@ -67,15 +68,6 @@ export function ApplicationModal({ application, onClose, onDelete, onUpdate }: P
                   notes: application.notes,
                 }}
               />
-              <div className="flex justify-end mt-4">
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
-                  aria-label="Cancel"
-                >
-                  Cancel
-                </button>
-              </div>
             </>
           ) : (
             <>

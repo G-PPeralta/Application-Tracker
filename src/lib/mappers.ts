@@ -27,7 +27,7 @@ export function toSnakeCase(data: ApplicationFormData) {
     job_url: data.jobUrl,
     source: data.source,
     status: data.status,
-    interview_date: data.interviewDate ?? null,
+    interview_date: data.interviewDate || null,
     notes: data.notes ?? null,
   };
 }
