@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { applicationSchema, type ApplicationFormData, SOURCES, STATUSES } from "@/types/application";
+import { applicationSchema, type ApplicationFormData, type ApplicationFormInput, SOURCES, STATUSES } from "@/types/application";
 
 type Props = {
   onSubmit: (data: ApplicationFormData) => void;
@@ -15,7 +15,7 @@ export function ApplicationForm({ onSubmit, isSubmitting }: Props) {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<ApplicationFormData>({
+  } = useForm<ApplicationFormInput, unknown, ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       status: "Applied",

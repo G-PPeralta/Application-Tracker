@@ -18,7 +18,8 @@ export const applicationSchema = z.object({
   notes: z.string().optional(),
 });
 
-export type ApplicationFormData = z.infer<typeof applicationSchema>;
+export type ApplicationFormData = z.output<typeof applicationSchema>;
+export type ApplicationFormInput = z.input<typeof applicationSchema>;
 
 export type Application = ApplicationFormData & {
   id: string;
