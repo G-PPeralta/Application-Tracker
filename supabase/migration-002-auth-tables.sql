@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS accounts (
+  id UUID DEFAULT gen_random_uuid(),
   "userId" UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   type TEXT NOT NULL,
   provider TEXT NOT NULL,

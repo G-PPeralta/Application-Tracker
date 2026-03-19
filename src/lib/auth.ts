@@ -1,7 +1,6 @@
+import PostgresAdapter from "@auth/pg-adapter";
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import LinkedIn from "next-auth/providers/linkedin";
-import PostgresAdapter from "@auth/pg-adapter";
 import { Pool } from "pg";
 
 const pool = new Pool({
@@ -12,7 +11,12 @@ const pool = new Pool({
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PostgresAdapter(pool),
   session: { strategy: "jwt" },
-  providers: [Google, LinkedIn],
+  providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    }),
+  ],
   pages: {
     signIn: "/",
   },
