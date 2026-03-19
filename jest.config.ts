@@ -8,6 +8,7 @@ const config: Config = {
   testEnvironment: "jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "server-only": "<rootDir>/__mocks__/server-only.js",
   },
 };
 
