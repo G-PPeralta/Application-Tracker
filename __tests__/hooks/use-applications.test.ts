@@ -1,10 +1,11 @@
 import { groupApplications } from "@/hooks/use-applications";
 import type { Application } from "@/types/application";
 
-jest.mock("@/lib/queries", () => ({
-  fetchApplications: jest.fn(),
-  insertApplication: jest.fn(),
+jest.mock("@/lib/actions", () => ({
+  getApplications: jest.fn(),
+  createApplication: jest.fn(),
   deleteApplication: jest.fn(),
+  updateApplication: jest.fn(),
 }));
 
 const makeApp = (overrides: Partial<Application>): Application => ({

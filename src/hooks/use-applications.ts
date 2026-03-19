@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { fetchApplications, insertApplication, deleteApplication, updateApplication } from "@/lib/queries";
+import { getApplications, createApplication, deleteApplication, updateApplication } from "@/lib/actions";
 import { toApplication, toSnakeCase } from "@/lib/mappers";
 import type { Application, ApplicationFormData, Status } from "@/types/application";
 
@@ -63,7 +63,7 @@ export function useApplications() {
     try {
       setLoading(true);
       setError(null);
-      const rows = await fetchApplications();
+      const rows = await getApplications();
       setApplications(rows.map(toApplication));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load applications");
@@ -78,7 +78,7 @@ export function useApplications() {
 
   const add = useCallback(
     async (data: ApplicationFormData) => {
-      const row = await insertApplication(toSnakeCase(data));
+      const row = await createApplication(toSnakeCase(data));
       setApplications((prev) => [toApplication(row), ...prev]);
     },
     []
