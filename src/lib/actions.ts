@@ -1,4 +1,7 @@
-import { supabase } from "./supabase";
+"use server";
+
+import { auth } from "@/lib/auth";
+import { supabase } from "@/lib/supabase-server";
 
 type SnakeCaseApplication = {
   id: string;
@@ -13,24 +16,34 @@ type SnakeCaseApplication = {
   interview_date: string | null;
   notes: string | null;
   created_at: string;
+  user_id: string;
 };
 
-export async function fetchApplications(): Promise<SnakeCaseApplication[]> {
+async function requireUser(): Promise<string> {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Not authenticated");
+  return session.user.id;
+}
+
+export async function getApplications(): Promise<SnakeCaseApplication[]> {
+  const userId = await requireUser();
   const { data, error } = await supabase
     .from("applications")
     .select("*")
+    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
 }
 
-export async function insertApplication(
-  application: Omit<SnakeCaseApplication, "id" | "created_at">
+export async function createApplication(
+  application: Omit<SnakeCaseApplication, "id" | "created_at" | "user_id">
 ): Promise<SnakeCaseApplication> {
+  const userId = await requireUser();
   const { data, error } = await supabase
     .from("applications")
-    .insert([application])
+    .insert([{ ...application, user_id: userId }])
     .select()
     .single();
 
@@ -40,12 +53,14 @@ export async function insertApplication(
 
 export async function updateApplication(
   id: string,
-  updates: Partial<Omit<SnakeCaseApplication, "id" | "created_at">>
+  updates: Partial<Omit<SnakeCaseApplication, "id" | "created_at" | "user_id">>
 ): Promise<SnakeCaseApplication> {
+  const userId = await requireUser();
   const { data, error } = await supabase
     .from("applications")
     .update(updates)
     .eq("id", id)
+    .eq("user_id", userId)
     .select()
     .single();
 
@@ -54,10 +69,12 @@ export async function updateApplication(
 }
 
 export async function deleteApplication(id: string): Promise<void> {
+  const userId = await requireUser();
   const { error } = await supabase
     .from("applications")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .eq("user_id", userId);
 
   if (error) throw new Error(error.message);
 }
