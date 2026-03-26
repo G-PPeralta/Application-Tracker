@@ -57,7 +57,16 @@ describe("ApplicationModal", () => {
     render(
       <ApplicationModal application={mockApp} onClose={onClose} onDelete={jest.fn()} onUpdate={jest.fn()} />
     );
-    await userEvent.click(screen.getByRole("button", { name: /close/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("calls onClose when X button clicked", async () => {
+    const onClose = jest.fn();
+    render(
+      <ApplicationModal application={mockApp} onClose={onClose} onDelete={jest.fn()} onUpdate={jest.fn()} />
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Close modal" }));
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -75,5 +84,36 @@ describe("ApplicationModal", () => {
       <ApplicationModal application={mockApp} onClose={jest.fn()} onDelete={jest.fn()} onUpdate={jest.fn()} />
     );
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();
+  });
+
+  it("calls onClose when X button clicked in edit mode", async () => {
+    const onClose = jest.fn();
+    render(
+      <ApplicationModal
+        application={mockApp}
+        onClose={onClose}
+        onDelete={jest.fn()}
+        onUpdate={jest.fn()}
+      />
+    );
+    await userEvent.click(screen.getByRole("button", { name: /edit/i }));
+    const closeButton = screen.getByRole("button", { name: /close modal/i });
+    await userEvent.click(closeButton);
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("does not close when clicking the overlay", async () => {
+    const onClose = jest.fn();
+    const { container } = render(
+      <ApplicationModal
+        application={mockApp}
+        onClose={onClose}
+        onDelete={jest.fn()}
+        onUpdate={jest.fn()}
+      />
+    );
+    const overlay = container.querySelector(".fixed.inset-0");
+    await userEvent.click(overlay!);
+    expect(onClose).not.toHaveBeenCalled();
   });
 });
